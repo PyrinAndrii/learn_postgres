@@ -5,4 +5,6 @@
 `\h` - help with SQL commands;
 `\h CREATE TABLE` - help with CREATE TABLE command;
 `\q` - quit;
+`\d` - shows list of relations (tables, views, sequences, etc.);
 `\d TABLE_NAME` - shows table information;
+`\d+ TABLE_NAME` - shows extended table information;
