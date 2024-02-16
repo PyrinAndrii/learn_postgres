@@ -8,3 +8,4 @@
 `\d` - shows list of relations (tables, views, sequences, etc.);
 `\d TABLE_NAME` - shows table information;
 `\d+ TABLE_NAME` - shows extended table information;
+`\x` - on/off extended display of outputs;
