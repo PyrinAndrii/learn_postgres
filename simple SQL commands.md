@@ -14,7 +14,7 @@ UPDATE table_name SET column1 = column1 * 2 WHERE condition;
 DELETE FROM table_name WHERE condition;
 
 SELECT task_id, count( * ) FROM task_goals GROUP BY task_id;
-SELECT task_id, title, count( * ) FROM task_goals GROUP BY task_id, title ORDER BY count DES;
+SELECT task_id, title, count( * ), SUM(cost) FROM task_goals GROUP BY task_id, title ORDER BY count DESC;
 
 -- Date and time commands:
 SELECT 'Jan 21, 2024'::date;
