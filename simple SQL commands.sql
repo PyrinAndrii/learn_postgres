@@ -1,4 +1,3 @@
-```
 CREATE TABLE table_name (...);
 DROP TABLE table_name;
 
@@ -29,4 +28,3 @@ SELECT 'P0002-01-03T29:08:07'::interval;
 SELECT ('2023-02-02'::timestamp - '2024-01-21'::timestamp)::interval;
 SELECT ( date_trunc( 'min', current_timestamp ) );
 SELECT extract( 'mon' FROM timestamp '1996-11-27 13:20:30.53241' );
-```
