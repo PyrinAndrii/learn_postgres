@@ -25,3 +25,8 @@ ALTER TABLE workers
   TO second_working_place_id_for_workers_fkey;
 
 ALTER TABLE workers ADD CHECK ( trim(name) <> '' );
+
+ALTER TABLE working_places ADD COLUMN serial_num integer;
+ALTER TABLE working_places ADD COLUMN serial_num text USING serial_num::text;
+
+ALTER TABLE working_places_equipments RENAME TO equipments_of_working_places;
