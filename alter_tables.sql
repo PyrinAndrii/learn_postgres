@@ -30,3 +30,5 @@ ALTER TABLE working_places ADD COLUMN serial_num integer;
 ALTER TABLE working_places ADD COLUMN serial_num text USING serial_num::text;
 
 ALTER TABLE working_places_equipments RENAME TO equipments_of_working_places;
+
+ALTER TABLE workers ADD COLUMN skills jsonb;

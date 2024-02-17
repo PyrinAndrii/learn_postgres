@@ -49,7 +49,7 @@ CREATE TABLE workers (
 	id serial PRIMARY KEY,
 	name VARCHAR ( 50 ) NOT NULL,
 	unit_id INT NOT NULL,
-	working_place_id INT NOT NULL,
+	working_place_id INT,
 	second_working_place_id INT NOT NULL,
 	FOREIGN KEY ( unit_id )
     REFERENCES units (id )
