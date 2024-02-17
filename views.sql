@@ -27,3 +27,13 @@ CREATE MATERIALIZED VIEW materialized_similar_task_goals
 
 REFRESH MATERIALIZED VIEW materialized_similar_task_goals;
 DROP MATERIALIZED VIEW materialized_similar_task_goals;
+
+
+CREATE VIEW oda_workers AS
+  SELECT workers.id, name
+  FROM workers
+  INNER JOIN units
+    ON workers.unit_id = units.id
+    WHERE units.title = 'ODA';
+
+SELECT * from oda_workers;
