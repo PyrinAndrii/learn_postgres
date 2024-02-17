@@ -23,3 +23,5 @@ ALTER TABLE working_places ADD UNIQUE (floor, room, place_number); -- generates 
 ALTER TABLE workers
   RENAME CONSTRAINT workers_second_working_place_id_fkey
   TO second_working_place_id_for_workers_fkey;
+
+ALTER TABLE workers ADD CHECK ( trim(name) <> '' );
