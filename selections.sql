@@ -47,3 +47,35 @@ SELECT w1.id, w1.name, w2.id, w2.name -- SELECT count( * )
 SELECT w1.id, w1.name, w2.id, w2.name -- SELECT count( * )
   FROM workers w1 CROSS JOIN workers w2
   WHERE w1.name <> w2.name;
+
+------------------------------------------------------------------------------------------------------------------
+-- GROUP JOINs
+SELECT w.id, w.name, tg.title, SUM ( tm.spent_hours ) total_spent_hours, count ( tm.spent_hours ) num_of_approaches
+  FROM workers w
+  JOIN time_spents tm ON w.id = tm.worker_id
+  JOIN task_goals tg ON tm.task_goal_id = tg.id
+  GROUP BY 1, 3
+  ORDER BY w.name, tg.title;
+
+--  id |  name   |    title     | total_spent_hours | num_of_approaches
+-- ----+---------+--------------+-------------------+-------------------
+--   5 | Natali  | Take notes 2 |                19 |                 1
+--   3 | Petro   | Take notes 2 |                11 |                 1
+--   3 | Petro   | Take notes 3 |                 1 |                 1
+--   6 | Suzanna | Make coffee  |                10 |                 2
+--   6 | Suzanna | Take notes 3 |                 7 |                 1
+
+------------------------------------------------------------------------------------------------------------------
+SELECT w.id, w.name, SUM ( tm.spent_hours ) total_spent_hours, count ( tm.spent_hours ) num_of_approaches
+  FROM workers w
+  LEFT OUTER JOIN time_spents tm ON w.id = tm.worker_id
+  LEFT OUTER JOIN task_goals tg ON tm.task_goal_id = tg.id
+  GROUP BY 1
+  ORDER BY w.id;
+
+--  id |  name   | total_spent_hours | num_of_approaches
+-- ----+---------+-------------------+-------------------
+--   3 | Petro   |                12 |                 2
+--   5 | Natali  |                19 |                 1
+--   6 | Suzanna |                17 |                 3
+--   8 | Mykola  |                   |                 0
