@@ -20,3 +20,30 @@ SELECT name, salary,
   END AS salary_level
   FROM workers
   ORDER BY salary_level;
+
+-- JOINS
+
+SELECT w.name, wp.room, wp.place_number
+  FROM workers AS w
+  JOIN working_places AS wp
+    ON w.working_place_id = wp.id
+  WHERE wp.floor = 1
+  ORDER BY w.name;
+
+SELECT w.name, wp.room, wp.place_number
+  FROM workers w, working_places wp
+  WHERE w.working_place_id = wp.id AND wp.floor = 1
+  ORDER BY w.name;
+
+-- 3 JOINs variants
+SELECT w1.id, w1.name, w2.id, w2.name -- SELECT count( * )
+  FROM workers w1, workers w2
+  WHERE w1.name <> w2.name;
+
+SELECT w1.id, w1.name, w2.id, w2.name -- SELECT count( * )
+  FROM workers w1
+  JOIN workers w2 ON w1.name <> w2.name;
+
+SELECT w1.id, w1.name, w2.id, w2.name -- SELECT count( * )
+  FROM workers w1 CROSS JOIN workers w2
+  WHERE w1.name <> w2.name;
