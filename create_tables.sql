@@ -59,3 +59,17 @@ CREATE TABLE workers (
 	FOREIGN KEY ( second_working_place_id )
     REFERENCES working_places (id )
 );
+
+CREATE TABLE time_spents (
+	id serial PRIMARY KEY,
+	worker_id INT NOT NULL,
+	task_goal_id INT NOT NULL,
+	spent_hours INT NOT NULL,
+	date DATE,
+	FOREIGN KEY ( worker_id )
+		REFERENCES workers (id )
+		ON DELETE CASCADE,
+	FOREIGN KEY ( task_goal_id )
+		REFERENCES task_goals (id )
+		ON DELETE CASCADE
+);

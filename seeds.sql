@@ -25,3 +25,10 @@ UPDATE workers
     "blind_typing": true
   }' -- ::jsonb
   WHERE name = 'Petro';
+
+INSERT INTO time_spents (worker_id, task_goal_id, spent_hours) VALUES (3, 2, 1);
+INSERT INTO time_spents (worker_id, task_goal_id, spent_hours) VALUES (3, 1, 11);
+INSERT INTO time_spents (worker_id, task_goal_id, spent_hours) VALUES (5, 1, 19);
+INSERT INTO time_spents (worker_id, task_goal_id, spent_hours) VALUES (6, 2, 7);
+INSERT INTO time_spents (worker_id, task_goal_id, spent_hours) VALUES (6, 5, 8);
+INSERT INTO time_spents (worker_id, task_goal_id, spent_hours) VALUES (6, 6, 2);
