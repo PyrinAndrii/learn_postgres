@@ -13,10 +13,10 @@ INSERT INTO working_places (floor, room, place_number) VALUES (2, 1, 1);
 INSERT INTO working_places (floor, room, place_number) VALUES (2, 2, 1);
 
 -- WORKERS
-INSERT INTO workers (name, unit_id, working_place_id) VALUES ('Petro', 1, 1);
-INSERT INTO workers (name, unit_id, working_place_id, second_working_place_id) VALUES ('Mykola', 1, 2, 3);
-INSERT INTO workers (name, unit_id, working_place_id, second_working_place_id) VALUES ('Natali', 1, 4, 5);
-INSERT INTO workers (name, unit_id, working_place_id, second_working_place_id) VALUES ('Suzanna', 1, 5, 6);
+INSERT INTO workers (name, unit_id, salary, working_place_id) VALUES ('Petro', 1, 10000, 1);
+INSERT INTO workers (name, unit_id, salary, working_place_id, second_working_place_id) VALUES ('Mykola', 1, 25000, 2, 3);
+INSERT INTO workers (name, unit_id, salary, working_place_id, second_working_place_id) VALUES ('Natali', 1, 15000, 4, 5);
+INSERT INTO workers (name, unit_id, salary, working_place_id, second_working_place_id) VALUES ('Suzanna', 1, 7500, 5, 6);
 
 UPDATE workers
   SET skills =

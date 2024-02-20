@@ -79,3 +79,71 @@ SELECT w.id, w.name, SUM ( tm.spent_hours ) total_spent_hours, count ( tm.spent_
 --   5 | Natali  |                19 |                 1
 --   6 | Suzanna |                17 |                 3
 --   8 | Mykola  |                   |                 0
+
+
+-- SELECT FROM VALUES
+SELECT range.min_salary, range.max_salary, count( w.* )
+  FROM workers w
+  RIGHT OUTER JOIN
+    (
+      VALUES (0, 9999), (10000, 19999), (20000, 29999)
+    ) AS range (min_salary, max_salary)
+    ON w.salary >= range.min_salary AND w.salary < range.max_salary
+  GROUP BY range.min_salary, range.max_salary
+  ORDER BY range.min_salary;
+
+--  min_salary | max_salary | count
+-- ------------+------------+-------
+--           0 |       9999 |     1
+--       10000 |      19999 |     2
+--       20000 |      29999 |     1
+
+
+------------------------------------------------------------------------------------------------------------------
+-- UNION, INTERSECT, EXCEPT
+SELECT * FROM task_goals WHERE task_id IN (1, 2);
+--  id |    title     | task_id |  cost
+-- ----+--------------+---------+--------
+--  15 | Take notes   |       2 |   0.00
+--   3 | Take notes 3 |       1 |   0.00
+--   5 | Make coffee  |       2 |   0.00
+--  13 | Make coffee  |       1 |   0.00
+--   1 | Take notes 2 |       2 | 331.45
+--   4 | Take notes 3 |       2 |  23.00
+--   2 | Take notes 3 |       2 |  22.00
+--  16 | Final task   |       1 |  25.50
+
+-- UNION (OR)
+SELECT title FROM task_goals WHERE task_id = 1
+UNION -- UNION ALL
+SELECT title FROM task_goals WHERE task_id = 2
+ORDER BY title;
+--     title
+-- --------------
+--  Final task
+--  Make coffee
+--  Take notes
+--  Take notes 2
+--  Take notes 3
+-- (4 rows)
+
+-- INTERSECT (AND)
+SELECT title FROM task_goals WHERE task_id = 1
+INTERSECT -- INTERSECT ALL
+SELECT title FROM task_goals WHERE task_id = 2
+ORDER BY title;
+--     title
+-- --------------
+--  Make coffee
+--  Take notes 3
+-- (2 rows)
+
+-- EXCEPT
+SELECT title FROM task_goals WHERE task_id = 1
+EXCEPT -- EXCEPT ALL
+SELECT title FROM task_goals WHERE task_id = 2
+ORDER BY title;
+--    title
+-- ------------
+--  Final task
+-- (1 row)
