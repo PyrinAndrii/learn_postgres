@@ -147,3 +147,22 @@ ORDER BY title;
 -- ------------
 --  Final task
 -- (1 row)
+
+
+SELECT avg( salary ) FROM workers;
+SELECT min( salary ) FROM workers;
+SELECT max( salary ) FROM workers;
+
+SELECT w.name, count( * ), SUM( tm.spent_hours )
+  FROM time_spents tm
+  JOIN workers w ON w.id = tm.worker_id
+  GROUP BY w.name
+  ORDER BY count DESC;
+
+-- HAVING (is using only after GROUP BY)
+SELECT w.name, count( * ), SUM( tm.spent_hours )
+  FROM time_spents tm
+  JOIN workers w ON w.id = tm.worker_id
+  GROUP BY w.name
+  HAVING count( * ) >= 2 -- HAVING SUM( tm.spent_hours ) >= 15
+  ORDER BY count DESC;
