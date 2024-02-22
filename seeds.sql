@@ -1,6 +1,7 @@
 
 -- UNITS
-INSERT INTO units (title) VALUES ('ODA');
+INSERT INTO units (title, language) VALUES ('ODA', 'uk');
+INSERT INTO units (title, language) VALUES ('police', 'en');
 
 -- WORKING PLACES
 INSERT INTO working_places (floor, room, place_number) VALUES (1, 1, 1);
@@ -25,6 +26,13 @@ UPDATE workers
     "blind_typing": true
   }' -- ::jsonb
   WHERE name = 'Petro';
+
+UPDATE workers
+  SET skills =
+  '{
+    "languages": { "uk": "C1", "en": "C2" }
+  }' -- ::jsonb
+  WHERE name = 'Suzanna';
 
 INSERT INTO time_spents (worker_id, task_goal_id, spent_hours, date) VALUES (3, 2, 1,  '2024-01-05');
 INSERT INTO time_spents (worker_id, task_goal_id, spent_hours, date) VALUES (3, 1, 11, '2024-02-05');

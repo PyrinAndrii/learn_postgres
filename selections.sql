@@ -86,7 +86,7 @@ SELECT range.min_salary, range.max_salary, count( w.* )
   FROM workers w
   RIGHT OUTER JOIN
     (
-      VALUES (0, 9999), (10000, 19999), (20000, 29999)
+      VALUES (0, 9999), (10000, 19999), (20000, 29999) -- virtual table
     ) AS range (min_salary, max_salary)
     ON w.salary >= range.min_salary AND w.salary < range.max_salary
   GROUP BY range.min_salary, range.max_salary
@@ -214,3 +214,85 @@ SELECT w.name,
 --  Suzanna |           8 | 2024-01-15 |    1
 --  Suzanna |           7 | 2024-01-17 |    2
 --  Suzanna |           2 | 2024-01-01 |    3
+
+
+------------------------------------------------------------------------------------------------------------------
+-- SUBQUERIES
+SELECT count( * ) FROM workers
+  WHERE salary >
+    ( SELECT avg( salary ) FROM workers );
+
+SELECT *
+  FROM workers
+  WHERE skills->'languages'->>'en' = 'C2';
+
+SELECT *
+  FROM workers
+  WHERE skills->'languages' ? (
+      SELECT language
+        FROM units
+        WHERE title ~ 'police'
+);
+
+SELECT *
+  FROM workers
+  WHERE skills->'languages' ?| array[(
+      SELECT language
+        FROM units
+        WHERE title ~ 'police'
+)];
+
+
+SELECT *
+  FROM workers
+  WHERE salary IN ( -- WHERE salary NOT IN (
+   ( SELECT max( salary ) FROM workers ),
+   ( SELECT min( salary ) FROM workers )
+  )
+  ORDER BY salary;
+
+
+SELECT u.title,
+	( SELECT count( * )
+			FROM workers w
+			WHERE w.unit_id = u.id
+  			AND skills->'languages' ? 'en'
+	) AS uk_speaking,
+	( SELECT count( * )
+			FROM workers w
+			WHERE w.unit_id = u.id
+  			AND skills->'languages' ? 'uk'
+	) AS uk_speaking,
+	( SELECT count( * )
+			FROM workers w
+			WHERE w.unit_id = u.id
+  			AND skills->'languages' ? 'es'
+	) AS es_speaking
+  FROM units u
+	ORDER BY u.title;
+--  title  | uk_speaking | uk_speaking | es_speaking
+-- --------+-------------+-------------+-------------
+--  ODA    |           2 |           2 |           0
+--  police |           0 |           0 |           0
+
+
+SELECT s2.title,
+  string_agg(
+     s2.eng_level || ': (' || s2.count || ')',
+', ' ) AS eng_levels
+  FROM (
+    SELECT u.title,
+          w.skills->'languages'->>'en' AS eng_level,
+          count (*)
+      FROM workers w
+      RIGHT OUTER JOIN units u ON w.unit_id = u.id
+      GROUP BY 1, 2
+      ORDER BY 1, 2
+  ) AS s2
+  GROUP BY s2.title
+  ORDER BY s2.title;
+--  title  |    eng_levels
+-- --------+------------------
+--  ODA    | A2: (1), C2: (1)
+--  police |
+-- (2 rows)

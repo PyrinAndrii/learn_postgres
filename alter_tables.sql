@@ -33,3 +33,5 @@ ALTER TABLE working_places_equipments RENAME TO equipments_of_working_places;
 
 ALTER TABLE workers ADD COLUMN skills jsonb;
 ALTER TABLE workers ADD COLUMN salary integer;
+
+ALTER TABLE units ADD COLUMN language VARCHAR ( 50 );
