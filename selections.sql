@@ -166,3 +166,51 @@ SELECT w.name, count( * ), SUM( tm.spent_hours )
   GROUP BY w.name
   HAVING count( * ) >= 2 -- HAVING SUM( tm.spent_hours ) >= 15
   ORDER BY count DESC;
+
+-- WINDOW FUNCTIONS ( rant/count( * ) OVER (...) )
+SELECT tasks.title,
+			 task_goals.title,
+			 w.name,
+			 tm.date,
+			 extract( 'month' from tm.date ) AS month,
+       extract( 'day'   from tm.date ) AS day,
+			 count( * ) OVER (
+         PARTITION BY date_trunc( 'month', tm.date )
+         ORDER BY tm.date
+       ) AS count
+	FROM time_spents tm
+	JOIN workers w ON tm.worker_id = w.id
+	JOIN task_goals ON tm.task_goal_id = task_goals.id
+	JOIN tasks ON task_goals.task_id = tasks.id
+	WHERE tasks.id = 2
+	ORDER BY tm.date;
+
+--     title    |    title     |  name   |    date    | month | day | count
+-- -------------+--------------+---------+------------+-------+-----+-------
+--  Create task | Make coffee  | Suzanna | 2024-01-01 |     1 |   1 |     1
+--  Create task | Take notes 3 | Petro   | 2024-01-05 |     1 |   5 |     3
+--  Create task | Take notes 2 | Natali  | 2024-01-05 |     1 |   5 |     3
+--  Create task | Make coffee  | Suzanna | 2024-01-15 |     1 |  15 |     4
+--  Create task | Take notes 3 | Suzanna | 2024-01-17 |     1 |  17 |     5
+--  Create task | Take notes 2 | Petro   | 2024-02-05 |     2 |   5 |     1
+
+-- RANK
+SELECT w.name,
+			 tm.spent_hours,
+			 tm.date,
+			rank() OVER (
+				PARTITION BY w.name
+				ORDER BY tm.spent_hours DESC
+			)
+  FROM time_spents tm
+  JOIN workers w ON w.id = tm.worker_id
+	ORDER BY w.name;
+
+--   name   | spent_hours |    date    | rank
+-- ---------+-------------+------------+------
+--  Natali  |          19 | 2024-01-05 |    1
+--  Petro   |          11 | 2024-02-05 |    1
+--  Petro   |           1 | 2024-01-05 |    2
+--  Suzanna |           8 | 2024-01-15 |    1
+--  Suzanna |           7 | 2024-01-17 |    2
+--  Suzanna |           2 | 2024-01-01 |    3
