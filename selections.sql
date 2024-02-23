@@ -296,3 +296,81 @@ SELECT s2.title,
 --  ODA    | A2: (1), C2: (1)
 --  police |
 -- (2 rows)
+
+
+------------------------------------------------------------------------------------------------------------------
+SELECT w.name,
+       count(*)
+  FROM time_spents
+  JOIN workers w
+    ON w.id = time_spents.worker_id
+  GROUP BY w.name
+  HAVING count(*) > 1;
+
+SELECT worker_id,
+       count(*)
+  FROM time_spents
+  GROUP BY worker_id
+  HAVING count(*) > 1;
+
+SELECT w.name, tm.task_goal_id, tm.spent_hours
+  FROM (
+    SELECT worker_id
+    FROM time_spents
+    GROUP BY worker_id
+    HAVING count(*) > 1
+  ) AS grouped_tm
+  JOIN workers w
+    ON w.id = grouped_tm.worker_id
+  JOIN time_spents tm
+    ON w.id = tm.worker_id;
+-- CTE (Common Table Expressions) - THE SAME AS ABOVE
+WITH grouped_tm AS (
+  SELECT worker_id
+    FROM time_spents
+    GROUP BY worker_id
+    HAVING count(*) > 1
+)
+SELECT w.name, tm.task_goal_id, tm.spent_hours
+  FROM grouped_tm
+  JOIN workers w
+    ON w.id = grouped_tm.worker_id
+  JOIN time_spents tm
+    ON w.id = tm.worker_id;
+
+
+SELECT tm.worker_id, tm.task_goal_id, tm.spent_hours
+  FROM time_spents tm
+  WHERE tm.worker_id IN (
+    SELECT worker_id
+      FROM time_spents
+      GROUP BY worker_id
+      HAVING count(*) > 1
+  );
+------------------------------------------------------------------------------------------------------------------
+
+-- WITH...AS(...).
+WITH RECURSIVE ranges ( min_salary, max_salary ) AS
+  ( VALUES ( 0, 9999 )
+    UNION ALL
+    SELECT min_salary + 10000, max_salary + 10000
+      FROM ranges
+      WHERE max_salary <
+       ( SELECT max( salary ) FROM workers )
+  )
+SELECT * FROM ranges;
+
+WITH RECURSIVE ranges ( min_salary, max_salary ) AS
+  ( VALUES ( 0, 9999 )
+    UNION ALL
+    SELECT min_salary + 10000, max_salary + 10000
+      FROM ranges
+      WHERE max_salary <
+       ( SELECT max( salary ) FROM workers )
+  )
+SELECT ranges.min_salary, ranges.max_salary, count( w.* )
+  FROM workers w
+  RIGHT OUTER JOIN ranges
+    ON w.salary >= ranges.min_salary AND w.salary < ranges.max_salary
+  GROUP BY ranges.min_salary, ranges.max_salary
+  ORDER BY ranges.min_salary;
