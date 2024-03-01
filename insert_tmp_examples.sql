@@ -59,3 +59,8 @@ INSERT INTO workers_tmp
 -- COPY
 COPY workers_tmp FROM '/insert_file_example.txt' DELIMITER '|';
 COPY workers_tmp TO '/workers_tmp.txt' WITH ( FORMAT csv );
+
+COPY workers_tmp FROM STDIN WITH ( FORMAT csv );
+12,Serhii,1,12,22,null,9999
+13,Ivan,1,7,33,null,12500
+\.
