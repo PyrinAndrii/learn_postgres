@@ -10,3 +10,6 @@
 `\d+ TABLE_NAME` - shows extended table information;
 `\x` - on/off extended display of outputs;
 `\dn` - List of schemas;
+`\timing on / off` - show query execution time;
+`\di` - List of indexes;
+`\di+` - List of indexes with extended information;
