@@ -67,4 +67,38 @@ END;
 SELECT * FROM workers;
 --
 -----------------------------------------------------------------------------------------
-
+-- Repeatable Read
+-- first terminal
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+SELECT * FROM workers;
+--
+-- second terminal
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+INSERT INTO workers (name, unit_id, working_place_id, second_working_place_id, skills, salary) values ('Ihor', 1, 3, 3, null, 27500);
+UPDATE workers SET salary = salary + 222 WHERE name = 'Mykola';
+SELECT * FROM workers WHERE;
+END;
+--
+-- first terminal
+SELECT * FROM workers WHERE; -- nothing has changed
+END;
+SELECT * FROM workers WHERE;
+--
+--------------------------------------------
+-- first terminal
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+UPDATE workers SET salary = salary + 777 WHERE name = 'Ihor';
+--
+-- second terminal
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+UPDATE workers SET salary = salary + 778 WHERE name = 'Ihor';
+--
+-- first terminal
+END;
+--
+-- second terminal
+-- error!
+END;
+-- rollback!
+--
+-----------------------------------------------------------------------------------------
