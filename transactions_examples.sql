@@ -102,3 +102,33 @@ END;
 -- rollback!
 --
 -----------------------------------------------------------------------------------------
+
+-- first terminal
+BEGIN;
+LOCK TABLE workers IN ACCESS EXCLUSIVE MODE;
+--
+-- second terminal
+BEGIN;
+SELECT * FROM workers WHERE salary > 11000;
+--
+-- first terminal
+ROLLBACK
+--
+-- second terminal ...
+-----------------------------------------------------------------------------------------
+
+-- first terminal
+BEGIN;
+SELECT * FROM workers WHERE salary > 11000 FOR UPDATE;
+--
+-- second terminal
+BEGIN;
+SELECT * FROM workers WHERE salary > 11000 FOR UPDATE;
+-- hang
+--
+-- first terminal
+UPDATE workers SET salary = salary + 111 WHERE name = 'Ihor';
+COMMIT;
+--
+-- second terminal
+-- salary was updated!
