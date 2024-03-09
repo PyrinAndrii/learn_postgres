@@ -12,4 +12,4 @@ docker-compose exec -it learn-postgres-db psql -U postgres
 ```
 
 ## Database diagram:<br/>
-<img src="database_diagram_2024-01-20.png" width="800" height="550">
+<img src="database_diagram_2024-03-09.png" width="800" height="550">
